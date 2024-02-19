@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Feb 19 19:54:58 2024
+Created on Mon Feb 19 20:21:28 2024
 
 @author: goldg
 """
-# 메타크리틱 점수 와 가격, 긍정 비율 및 총 리뷰 수 시각화
+# 총 리뷰 수(긍정+부정) 과 긍정 비율, 가격 / 긍정 비율 vs 가격 시각화
 
 import pandas as pd
 import numpy as np
@@ -26,42 +26,41 @@ file_paths = os.path.join(basic_file_path, 'final_dataset.csv')
 df = pd.read_csv(file_paths)
 
 def data_EDA(df):
-    df = df[df['Metacritic score'] != 0]
     df['Total_Reviews'] = df['Positive'] + df['Negative']
     df['Log_Total_Reviews'] = np.log1p(df['Total_Reviews'])
     df['Positive_ratio'] = df['Positive'] / (df['Positive'] + df['Negative'])
     
     return df
 
-# Metacritic score vs. Positive ratio 시각화
+# Total reviews vs Positive Ratio 시각화
 def plot_metacritic_vs_positive(df):
     fig, ax = plt.subplots(figsize=(10, 6))
-    sns.scatterplot(data=df, x='Metacritic score', y='Positive_ratio', alpha=0.5, ax=ax)
-    ax.set_title('Metacritic score vs. Positive ratio')
-    ax.set_xlabel('Metacritic score')
-    ax.set_ylabel('Positive ratio')
+    sns.scatterplot(data=df, x='Log_Total_Reviews', y='Positive_ratio', alpha=0.5, ax=ax)
+    ax.set_title('Total reviews count vs Positive ratio')
+    ax.set_xlabel('Total reviews count')
+    ax.set_ylabel('Positive Ratio')
     ax.grid(True)
     
     return fig
 
-# Metacritic score vs. Price 시각화
-def plot_metacritic_vs_price(df):
+# Total reviews vs Price 시각화
+def plot_metacritic_vs_Price(df):
     fig, ax = plt.subplots(figsize=(10, 6))
-    sns.scatterplot(data=df, x='Metacritic score', y='Price', alpha=0.5, ax=ax)
-    ax.set_title('Metacritic score vs. Price')
-    ax.set_xlabel('Metacritic score')
+    sns.scatterplot(data=df, x='Log_Total_Reviews', y='Price', alpha=0.5, ax=ax)
+    ax.set_title('Total reviews count vs Price')
+    ax.set_xlabel('Total reviews count')
     ax.set_ylabel('Price')
     ax.grid(True)
     
     return fig
 
-# Total reviews vs Metacritic score 시각화
-def plot_totalreviews_vs_metacritic(df):
+# Positive Ratio vs Price 시각화
+def plot_positive_vs_Price(df):
     fig, ax = plt.subplots(figsize=(10, 6))
-    sns.scatterplot(data=df, x='Log_Total_Reviews', y='Metacritic score', alpha=0.5, ax=ax)
-    ax.set_title('Total reviews count vs Metacritic score')
-    ax.set_xlabel('Total reviews count')
-    ax.set_ylabel('Metacritic score')
+    sns.scatterplot(data=df, x='Positive_ratio', y='Price', alpha=0.5, ax=ax)
+    ax.set_title('Positive ratio vs Price')
+    ax.set_xlabel('Positive Rati')
+    ax.set_ylabel('Price')
     ax.grid(True)
     
     return fig
