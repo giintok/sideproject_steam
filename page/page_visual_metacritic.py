@@ -1,25 +1,25 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Feb  6 16:32:23 2024
-
-@author: goldg
-"""
-
 import streamlit as st
-from utils import utils_visual_metacritic as ut1
-
-data = ut1.read_data(ut1.file_paths)
-top_games_data = ut1.select_top_games(data)
-plot01 = ut1.visualize_top_games(top_games_data)
-
-positive_rate_fig, negative_rate_fig = ut1.visualize_review_rates(data)
-
-avg_score_and_info = ut1.analyze_developers(data)
-
+from utils import utils_visual_metacritic as uv_meta
 
 def app():
-    st.subheader('Top Games Visualization')
-    st.pyplot(plot01)
-    st.plotly_chart(positive_rate_fig)
-    st.plotly_chart(negative_rate_fig)
-    st.write(avg_score_and_info)
+    
+    df = uv_meta.df
+    df = uv_meta.data_EDA(df)
+    
+    # 선택 상자 생성
+    choice = st.selectbox("Choose a graph", ["Metacritic vs. Positive", "Metacritic vs. Price", "Total Reviews vs. Metacritic"])
+    
+    if choice == "Metacritic vs. Positive":
+        st.header("Metacritic vs. Positive")
+        plot_MvsPos = uv_meta.plot_metacritic_vs_positive(df)
+        st.pyplot(plot_MvsPos)
+    
+    elif choice == "Metacritic vs. Price":
+        st.header("Metacritic vs. Price")
+        plot_MvsPri = uv_meta.plot_metacritic_vs_price(df)
+        st.pyplot(plot_MvsPri)
+    
+    elif choice == "Total Reviews vs. Metacritic":
+        st.header("Total Reviews vs. Metacritic")
+        plot_MvsR = uv_meta.plot_totalreviews_vs_metacritic(df)
+        st.pyplot(plot_MvsR)
